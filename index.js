@@ -8,7 +8,7 @@ var app = express();
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
-app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors({ optionsSuccessStatus: 200 }));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -20,21 +20,26 @@ app.get("/", function (req, res) {
 
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+  res.json({ greeting: 'hello API' });
 });
 
+// Timestamp API endpoint
 app.get("/api/:date?", function (req, res) {
   const dateString = req.params.date;
   let date;
 
+  // If no date string is provided, use the current date
   if (!dateString) {
     date = new Date();
-  } else if (!isNaN(parseInt(dateString))) {
+  } else if (!isNaN(dateString)) {
+    // If dateString is a number (timestamp), parse it as an integer
     date = new Date(parseInt(dateString));
   } else {
+    // Otherwise, attempt to parse dateString as a date
     date = new Date(dateString);
   }
 
+  // Check if the date is valid
   if (date.toString() === "Invalid Date") {
     res.json({ error: "Invalid Date" });
   } else {
